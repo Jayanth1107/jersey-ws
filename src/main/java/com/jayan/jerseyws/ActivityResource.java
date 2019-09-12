@@ -3,8 +3,10 @@ package com.jayan.jerseyws;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +24,28 @@ import com.jayan.jerseyws.repository.ActivityRepositoryStub;
 public class ActivityResource {
 	private ActivityRepository activityRepository = new ActivityRepositoryStub();
 	
+	
+	@DELETE
+	@Path("{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response deleteActivity(@PathParam("id") int id) {
+		System.out.println("Deleting activity with ID : "+ id);
+		activityRepository.deleteActivity(id);
+		
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Path("activity/{activtyId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response updateActivity(Activity activity) {
+		System.out.println(activity.getId()+" : "+activity.getDescription()+" , "+activity.getDuration());
+		activity = activityRepository.update(activity);
+		
+		return Response.ok().entity(activity).build();
+	}
 	
 	@POST
 	@Path("activity")
